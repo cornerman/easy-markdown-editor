@@ -1782,24 +1782,6 @@ function EasyMDE(options) {
             event.stopPropagation();
             event.preventDefault();
         });
-
-        this.codemirror.on('drop', function (cm, event) {
-            event.stopPropagation();
-            event.preventDefault();
-            if (options.imageUploadFunction) {
-                self.uploadImagesUsingCustomFunction(options.imageUploadFunction, event.dataTransfer.files);
-            } else {
-                self.uploadImages(event.dataTransfer.files);
-            }
-        });
-
-        this.codemirror.on('paste', function (cm, event) {
-            if (options.imageUploadFunction) {
-                self.uploadImagesUsingCustomFunction(options.imageUploadFunction, event.clipboardData.files);
-            } else {
-                self.uploadImages(event.clipboardData.files);
-            }
-        });
     }
 }
 
