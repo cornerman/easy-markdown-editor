@@ -2017,13 +2017,22 @@ EasyMDE.prototype.render = function (el) {
     easyMDEContainer.classList.add('EasyMDEContainer');
     var cmWrapper = this.codemirror.getWrapperElement();
     cmWrapper.parentNode.insertBefore(easyMDEContainer, cmWrapper);
-    easyMDEContainer.appendChild(cmWrapper);
 
     if (options.toolbar !== false) {
         this.gui.toolbar = this.createToolbar();
+        easyMDEContainer.appendChild(this.gui.toolbar);
     }
+
+    var editorAndPreviewContainer = document.createElement('div');
+    editorAndPreviewContainer.classList.add('EasyMDEEditorAndPreview');
+    editorAndPreviewContainer.appendChild(cmWrapper);
+    this.gui.sideBySide = this.createSideBySide(function(preview) {return editorAndPreviewContainer.appendChild(preview);});
+    easyMDEContainer.appendChild(editorAndPreviewContainer);
+
+
     if (options.status !== false) {
         this.gui.statusbar = this.createStatusbar();
+        easyMDEContainer.appendChild(this.gui.statusbar);
     }
     if (options.autosave != undefined && options.autosave.enabled === true) {
         this.autosave(); // use to load localstorage content
@@ -2034,8 +2043,6 @@ EasyMDE.prototype.render = function (el) {
             }, self.options.autosave.submit_delay || self.options.autosave.delay || 1000);
         });
     }
-
-    this.gui.sideBySide = this.createSideBySide();
 
     this._rendered = this.element;
 
@@ -2292,7 +2299,7 @@ EasyMDE.prototype.setPreviewMaxHeight = function () {
     preview.style.height =  previewMaxHeight;
 };
 
-EasyMDE.prototype.createSideBySide = function () {
+EasyMDE.prototype.createSideBySide = function (insertIntoDom) {
     var cm = this.codemirror;
     var wrapper = cm.getWrapperElement();
     var preview = wrapper.nextSibling;
@@ -2313,7 +2320,7 @@ EasyMDE.prototype.createSideBySide = function () {
             }
         }
 
-        wrapper.parentNode.insertBefore(preview, wrapper.nextSibling);
+        insertIntoDom(preview);
     }
 
     if (typeof this.options.maxHeight !== 'undefined') {
@@ -2450,8 +2457,6 @@ EasyMDE.prototype.createToolbar = function (items) {
         }
     });
 
-    var cmWrapper = cm.getWrapperElement();
-    cmWrapper.parentNode.insertBefore(bar, cmWrapper);
     return bar;
 };
 
@@ -2578,9 +2583,6 @@ EasyMDE.prototype.createStatusbar = function (status) {
     }
 
 
-    // Insert the status bar into the DOM
-    var cmWrapper = this.codemirror.getWrapperElement();
-    cmWrapper.parentNode.insertBefore(bar, cmWrapper.nextSibling);
     return bar;
 };
 

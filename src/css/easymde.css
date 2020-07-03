@@ -1,11 +1,12 @@
 .EasyMDEContainer {
-    display: block;
+    display: flex;
+    flex-direction: column;
 }
 
-.EasyMDEContainer.sided--no-fullscreen {
+.EasyMDEEditorAndPreview {
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
+    height: 100%;
 }
 
 .CodeMirror {
@@ -131,10 +132,6 @@
     right: 0;
     margin: 0;
     padding: 0;
-}
-
-.editor-toolbar.sided--no-fullscreen {
-    width: 100%;
 }
 
 .editor-toolbar button, .editor-toolbar .easymde-dropdown {
